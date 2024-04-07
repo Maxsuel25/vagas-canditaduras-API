@@ -4,12 +4,13 @@
   "description": "Padrão de corpo",
   "main": "index.js",
   "scripts": {
-    "dev": "tsnd --respawn src/server"
+    "dev": "tsnd --cls --respawn src/server"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^5.12.1",
     "express": "^4.19.2"
   },
   "devDependencies": {

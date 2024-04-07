@@ -12,3 +12,19 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Opportunity {
+  id Int @id @default(autoincrement())
+  title String
+  description String
+  application Application[]
+}
+
+model Application {
+  id Int @id @default(autoincrement())
+  name String
+  email String
+  linkedin String
+  opportunityId Int
+  opportunity Opportunity @relation(fields: [opportunityId], references: [id])
+}
