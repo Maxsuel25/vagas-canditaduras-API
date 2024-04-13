@@ -3,17 +3,29 @@ import { OpportunityServices } from "../services/opportunity.services";
 
 export class OpportunityControllers {
   
-  private opportunityServices = new OpportunityServices();
-
   async create(req: Request, res: Response) {
-    const response = await this.opportunityServices.create(req.body);
+    const opportunityServices = new OpportunityServices();
+
+    const response = await opportunityServices.create(req.body);
 
     return res.status(201).json(response);
   }
 
-  findMany(req: Request, res: Response) {}
+  async findMany(req: Request, res: Response){
+    const opportunityServices = new OpportunityServices();
 
-  findOne(req: Request, res: Response) {}
+    const response = await opportunityServices.findMany();
+
+    return res.status(200).json(response);
+}
+
+async findOne(req: Request, res: Response){
+    const opportunityServices = new OpportunityServices();
+
+    const response = await opportunityServices.findOne(Number(req.params.id));
+
+    return res.status(200).json(response);
+}
 
   update(req: Request, res: Response) {}
 
