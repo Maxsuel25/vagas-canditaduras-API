@@ -27,7 +27,19 @@ async findOne(req: Request, res: Response){
     return res.status(200).json(response);
 }
 
-  update(req: Request, res: Response) {}
+ async update(req: Request, res: Response) {
+   const opportunityServices= new OpportunityServices();
 
-  delete(req: Request, res: Response) {}
+   const response = await opportunityServices.update(Number(req.params.id),req.body);
+
+   return res.status(200).json(response);
+  }
+
+  async delete(req: Request, res: Response) {
+    const opportunityServices= new OpportunityServices();
+
+    const response = await opportunityServices.delete(Number(req.params.id));
+
+    res.status(204).json();
+  }
 }
