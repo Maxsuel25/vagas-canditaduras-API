@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { AppError } from "../erros/appErros";
+import { AppError } from "../errors/appErros";
 import { ZodError } from "zod";
 
-export class handleErros {
+export class HandleErros {
   static execute(
     error: Error,
     req: Request,

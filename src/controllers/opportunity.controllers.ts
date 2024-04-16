@@ -19,10 +19,10 @@ export class OpportunityControllers {
     return res.status(200).json(response);
 }
 
-async findOne(req: Request, res: Response){
+  findOne(req: Request, res: Response){
     const opportunityServices = new OpportunityServices();
 
-    const response = await opportunityServices.findOne(Number(req.params.id));
+    const response = opportunityServices.findOne(res.locals.opportunity);
 
     return res.status(200).json(response);
 }
