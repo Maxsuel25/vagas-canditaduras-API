@@ -4,7 +4,8 @@
   "description": "Padrão de corpo",
   "main": "index.js",
   "scripts": {
-    "dev": "tsnd --cls --respawn src/server"
+    "dev": "dotenv -e .env.develop -- tsnd --respawn src/server.ts",
+    "migrate:dev": "dotenv -e .env.develop -- npx prisma migrate dev"
   },
   "keywords": [],
   "author": "",
