@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { AppError } from "../errors/appErros";
 import { ZodError } from "zod";
+import { JsonWebTokenError } from "jsonwebtoken";
 
 export class HandleErros {
   static execute(
@@ -13,6 +14,9 @@ export class HandleErros {
       return res.status(error.statusCode).json({ message: error.message });
     }
 
+    if (error instanceof JsonWebTokenError) {
+      return res.status(403).json({ mensage: error.message });
+    }
     if (error instanceof ZodError) {
       return res.status(422).json(error);
     }
