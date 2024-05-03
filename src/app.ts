@@ -1,4 +1,6 @@
-import "express-async-errors"
+import "reflect-metadata";
+import "express-async-errors";
+import "dotenv/config";
 import express, { json } from "express";
 import helmet from "helmet";
 import { opportunityRouter } from "./routers/opportunity.router";
@@ -13,4 +15,4 @@ app.use(json());
 app.use("/opportunities", opportunityRouter);
 app.use("/opportunities", applicationRouter);
 
-app.use(HandleErros.execute)
+app.use(HandleErros.execute);
