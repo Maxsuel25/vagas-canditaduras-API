@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import { OpportunityServices } from "../services/opportunity.services";
+import { container } from "tsyringe";
 
 export class OpportunityControllers {
   
   async create(req: Request, res: Response) {
-    const opportunityServices = new OpportunityServices();
+    const opportunityServices = container.resolve(OpportunityServices);
 
     const response = await opportunityServices.create(req.body);
 
@@ -12,7 +13,7 @@ export class OpportunityControllers {
   }
 
   async findMany(req: Request, res: Response){
-    const opportunityServices = new OpportunityServices();
+    const opportunityServices = container.resolve(OpportunityServices);
 
     const response = await opportunityServices.findMany();
 
@@ -20,7 +21,7 @@ export class OpportunityControllers {
 }
 
   findOne(req: Request, res: Response){
-    const opportunityServices = new OpportunityServices();
+    const opportunityServices = container.resolve(OpportunityServices);
 
     const response = opportunityServices.findOne(res.locals.opportunity);
 
@@ -28,7 +29,7 @@ export class OpportunityControllers {
 }
 
  async update(req: Request, res: Response) {
-   const opportunityServices= new OpportunityServices();
+  const opportunityServices = container.resolve(OpportunityServices);
 
    const response = await opportunityServices.update(Number(req.params.id),req.body);
 
@@ -36,7 +37,7 @@ export class OpportunityControllers {
   }
 
   async delete(req: Request, res: Response) {
-    const opportunityServices= new OpportunityServices();
+    const opportunityServices = container.resolve(OpportunityServices);
 
     const response = await opportunityServices.delete(Number(req.params.id));
 

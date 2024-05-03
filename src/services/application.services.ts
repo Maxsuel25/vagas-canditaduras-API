@@ -1,6 +1,8 @@
 import { prisma } from "../database/prisma";
 import { TApplication, TApplicationCreate } from "../schemas/applications.schema";
+import { injectable } from "tsyringe";
 
+@injectable()
 export class ApplicationServices {
 
   async create(opportunityId: number, body: TApplicationCreate):Promise<TApplication> {

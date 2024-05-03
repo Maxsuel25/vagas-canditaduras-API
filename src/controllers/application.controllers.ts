@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
 import { ApplicationServices } from "../services/application.services";
+import { container } from "tsyringe";
 
 export class ApplicationControllers{
     async create(req: Request, res: Response){
-        const applicationServices = new ApplicationServices();
+        const applicationServices = container.resolve(ApplicationServices);
 
         const response = await applicationServices.create(Number(req.params.id),req.body);
 
@@ -11,7 +12,7 @@ export class ApplicationControllers{
         
     }
     async findMany(req: Request, res: Response){
-        const applicationServices = new ApplicationServices();
+        const applicationServices = container.resolve(ApplicationServices);
 
         const response = await applicationServices.findMany(Number(req.params.id));
 
