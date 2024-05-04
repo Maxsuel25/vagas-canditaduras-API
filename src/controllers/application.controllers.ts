@@ -1,20 +1,20 @@
 import { Request, Response } from "express";
 import { ApplicationServices } from "../services/application.services";
-import { container } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 
+@injectable()
 export class ApplicationControllers{
-    async create(req: Request, res: Response){
-        const applicationServices = container.resolve(ApplicationServices);
+      
+    constructor(@inject("ApplicationServices") private applicationServices: ApplicationServices) {}
 
-        const response = await applicationServices.create(Number(req.params.id),req.body);
+    async create(req: Request, res: Response){
+        const response = await this.applicationServices.create(Number(req.params.id),req.body);
 
         return res.status(201).json(response);
         
     }
     async findMany(req: Request, res: Response){
-        const applicationServices = container.resolve(ApplicationServices);
-
-        const response = await applicationServices.findMany(Number(req.params.id));
+        const response = await this.applicationServices.findMany(Number(req.params.id));
 
         return res.status(200).json(response);
     }
