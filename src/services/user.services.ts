@@ -1,51 +1,52 @@
 import { injectable } from "tsyringe";
-import { TUserLoginBody, TUserRegisterBody, TUserReturn, TUserReturnLogin, userReturnSchema } from "../schemas/user.schemas";
-import bcrypt from "bcrypt";
+import {
+   TUserLoginBody,
+   TUserLoginReturn,
+   TUserRegisterBody,
+   TUserReturn,
+   userReturnSchema,
+} from "../schemas/user.schemas";
 import { prisma } from "../database/prisma";
-import { AppError } from "../errors/appErros";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { AppError } from "../errors/appError";
 
 @injectable()
 export class UserServices {
+   async register(body: TUserRegisterBody): Promise<TUserReturn> {
+      const hashPassword = await bcrypt.hash(body.password, 10);
 
-  async register(body: TUserRegisterBody):Promise<TUserReturn> {
-    const hasPassword = await bcrypt.hash(body.password, 10);
+      const newUser = {
+         ...body,
+         password: hashPassword,
+      };
 
-    const newBody = {
-      ...body,
-      password: hasPassword,
-    };
+      const user = await prisma.user.create({ data: newUser });
 
-    const user = prisma.user.create({ data: newBody });
+      return userReturnSchema.parse(user);
+   }
 
-    return userReturnSchema.parse(user);
-  }
+   async login(body: TUserLoginBody): Promise<TUserLoginReturn> {
+      const user = await prisma.user.findFirst({ where: { email: body.email } });
 
-  async login(body: TUserLoginBody):Promise<TUserReturnLogin> {
-    const user = await prisma.user.findFirst({ where: { email: body.email }});
+      if (!user) {
+         throw new AppError(404, "User not registered");
+      }
 
-    if(!user){
-      throw new AppError(404, "User not register");
-    }
+      const compare = await bcrypt.compare(body.password, user.password);
 
-    const compare = bcrypt.compare(body.password, user.password);
+      if (!compare) {
+         throw new AppError(401, "Email and password doesn't match");
+      }
 
-    if(!compare){
-      throw new AppError(403,"Email and password doesn't match");
-    }
-    
-    const token = jwt.sign({id: user.id}, process.env.JWT_SECRET as string)
-    
-    const data =  {
-        accesToken: token, 
-        user: userReturnSchema.parse(user)
-    };
-    return data 
-  }
+      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string);
 
-  async getUser(id: number):Promise<TUserReturn> {
-      const user = await prisma.user.findFirst({where:{id}});
+      return { accessToken: token, user: userReturnSchema.parse(user) };
+   }
 
-    return userReturnSchema.parse(user);
-  }
+   async getUser(id: number): Promise<TUserReturn> {
+      const user = await prisma.user.findFirst({ where: { id } });
+
+      return userReturnSchema.parse(user);
+   }
 }

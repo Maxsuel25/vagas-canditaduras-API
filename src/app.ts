@@ -3,18 +3,23 @@ import "express-async-errors";
 import "dotenv/config";
 import express, { json } from "express";
 import helmet from "helmet";
-import { opportunityRouter } from "./routers/opportunity.router";
-import { applicationRouter } from "./routers/application.router";
-import { HandleErros } from "./middlewares/handleErros.middlewares";
-import { userRouter } from "./routers/user.router";
+import cors from "cors";
+import { opportunityRouter } from "./routes/opportunity.routes";
+import { HandleErrors } from "./middlewares/handleErrors.middleware";
+import { userRouter } from "./routes/user.routes";
 
 export const app = express();
 
+console.log(process.env.EXAMPLE);
+
+app.use(cors());
+
 app.use(helmet());
+
 app.use(json());
 
 app.use("/opportunities", opportunityRouter);
-app.use("/opportunities", applicationRouter);
-app.use("/user", userRouter);
 
-app.use(HandleErros.execute);
+app.use("/users", userRouter);
+
+app.use(HandleErrors.execute);
